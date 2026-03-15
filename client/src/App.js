@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Login from './components/Login';
 import Register from './components/Register';
+import TodoList from './components/TodoList';
 
 function App() {
   const [token, setToken] = useState(localStorage.getItem('token'));
@@ -14,7 +15,7 @@ function App() {
           <Login onLogin={setToken} />
         </>
       ) : (
-        <p>Sikeresen bejelentkezve! Token: {token}</p>
+        <TodoList />
       )}
     </div>
   );
