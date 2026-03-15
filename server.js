@@ -1,10 +1,12 @@
 // server.js
 const express = require('express');
 const cors = require('cors');
+const authRoutes = require('./routes/auth');
 
 const app = express();
 app.use(cors());
 app.use(express.json()); // JSON body parsing middleware
+app.use('/api/auth', authRoutes);
 
 // simple route
 app.get('/', (req, res) => {
