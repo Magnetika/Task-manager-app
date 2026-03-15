@@ -23,4 +23,15 @@ db.run(`
   )
 `);
 
+db.run(`
+  CREATE TABLE IF NOT EXISTS todos (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER,
+    title TEXT,
+    description TEXT,
+    completed INTEGER DEFAULT 0,
+    FOREIGN KEY(user_id) REFERENCES users(id)
+  )
+`);
+
 module.exports = db;
