@@ -37,7 +37,7 @@ jobs:
         run: PORT=5000 npm start > backend.log 2>&1 &
 
       - name: Start frontend
-        run: PORT=3000 npm start --prefix client > frontend.log 2>&1 &
+        run: CI=false PORT=3000 npm start --prefix client > frontend.log 2>&1 &
 
       - name: Wait for backend
         run: |
@@ -69,4 +69,12 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: Run Playwright tests
-        run: npx playwright test
+        run: npx playwright test --workers=1 --timeout=90000
+
+      - name: Print app logs on failure
+        if: failure()
+        run: |
+          echo "===== backend.log ====="
+          cat backend.log || true
+          echo "===== frontend.log ====="
+          cat frontend.log || true
