@@ -38,7 +38,7 @@ router.post('/login', async (req, res) => {
   }
 
   try {
-    // Felhasználó keresése az adatbázisban
+    // Find the user in the database
     const query = 'SELECT * FROM users WHERE username = ?';
     db.get(query, [username], async (err, user) => {
       if (err) {
@@ -48,13 +48,13 @@ router.post('/login', async (req, res) => {
         return res.status(400).json({ message: 'Helytelen felhasználónév vagy jelszó' });
       }
 
-      // Jelszó ellenőrzése
+      // Verify password
       const match = await bcrypt.compare(password, user.password);
       if (!match) {
         return res.status(400).json({ message: 'Helytelen felhasználónév vagy jelszó' });
       }
 
-      // JWT generálása
+      // Generate JWT
       const jwt = require('jsonwebtoken');
       const token = jwt.sign(
         { id: user.id, username: user.username },

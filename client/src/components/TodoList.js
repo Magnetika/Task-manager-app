@@ -26,7 +26,7 @@ function TodoList() {
 
   return (
     <div>
-      <h2>Todo lista</h2>
+      <h2 id="todo-title">Todo lista</h2>
       <TodoForm onAdd={handleAdd} />
       {todos.map(todo => (
         <TodoItem

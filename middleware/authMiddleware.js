@@ -9,7 +9,7 @@ function authenticateToken(req, res, next) {
 
   jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
     if (err) return res.status(403).json({ message: 'Érvénytelen token' });
-    req.user = user; // user ID és username elérhető lesz a route-okban
+    req.user = user; // user ID and username will be available in routes
     next();
   });
 }

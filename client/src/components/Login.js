@@ -10,8 +10,8 @@ function Login({ onLogin }) {
     e.preventDefault();
     try {
       const res = await API.post('/auth/login', { username, password });
-      localStorage.setItem('token', res.data.token); // token mentése
-      onLogin(res.data.token); // értesítjük App.js-t
+      localStorage.setItem('token', res.data.token); // save token
+      onLogin(res.data.token); // notify App.js
       setError('');
     } catch (err) {
       setError(err.response?.data?.message || 'Hiba történt');

@@ -2,10 +2,10 @@
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 
-// Adatbázis fájl elérési útja
+// Database file path
 const dbPath = path.resolve(__dirname, 'database.sqlite');
 
-// Kapcsolódás az adatbázishoz
+// Connect to the database
 const db = new sqlite3.Database(dbPath, (err) => {
   if (err) {
     console.error('Hiba az adatbázis csatlakozáskor:', err.message);
@@ -14,7 +14,7 @@ const db = new sqlite3.Database(dbPath, (err) => {
   }
 });
 
-// Users tábla létrehozása, ha még nincs
+// Create users table if it does not exist
 db.run(`
   CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,

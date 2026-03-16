@@ -9,7 +9,7 @@ function TodoForm({ onAdd }) {
     e.preventDefault();
     try {
       const res = await API.post('/todos', { title, description });
-      onAdd(res.data); // értesítjük a parent-t
+      onAdd(res.data); // notify the parent component
       setTitle('');
       setDescription('');
     } catch (err) {

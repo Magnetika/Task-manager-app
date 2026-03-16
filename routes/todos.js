@@ -4,7 +4,7 @@ const authenticateToken = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
-// Minden route JWT ellenőrzéssel
+// Protect all routes with JWT validation
 router.use(authenticateToken);
 
 // CREATE todo
