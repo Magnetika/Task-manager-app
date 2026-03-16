@@ -64,3 +64,9 @@ jobs:
           echo "Frontend failed to start"
           cat frontend.log
           exit 1
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Run Playwright tests
+        run: npx playwright test
