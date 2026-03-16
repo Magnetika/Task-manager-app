@@ -1,49 +1,28 @@
-import { test, expect } from '@playwright/test';
+import { test } from '@playwright/test';
+import {
+  clearBrowserSession,
+  createUniqueUsername,
+  expectTodoListVisible,
+  loginUser,
+  registerUser,
+} from './helpers/authHelpers';
 
 test.describe('Auth flow', () => {
   const baseURL = 'http://localhost:3000';
   const password = 'test123';
 
   test('Register a new user', async ({ page }) => {
-    const username = `user_${Date.now()}_reg`;
-
-    await page.goto(baseURL);
-
-    const registerForm = page.locator('form:has(button:has-text("Regisztráció"))');
-    await registerForm.getByPlaceholder('Felhasználónév').fill(username);
-    await registerForm.getByPlaceholder('Jelszó').fill(password);
-    await registerForm.getByRole('button', { name: 'Regisztráció' }).click();
-
-    await expect(page.locator('text=Felhasználó sikeresen létrehozva')).toBeVisible();
+    const username = createUniqueUsername('reg');
+    await registerUser({ page, baseURL, username, password });
   });
 
   test('Login with existing user', async ({ page }) => {
-    const username = `user_${Date.now()}_login`;
+    const username = createUniqueUsername('login');
 
-    // 1) Create user
-    await page.goto(baseURL);
+    await registerUser({ page, baseURL, username, password });
+    await clearBrowserSession({ page, baseURL });
+    await loginUser({ page, baseURL, username, password });
 
-    const registerForm = page.locator('form:has(button:has-text("Regisztráció"))');
-    await registerForm.getByPlaceholder('Felhasználónév').fill(username);
-    await registerForm.getByPlaceholder('Jelszó').fill(password);
-    await registerForm.getByRole('button', { name: 'Regisztráció' }).click();
-
-    await expect(page.locator('text=Felhasználó sikeresen létrehozva')).toBeVisible();
-
-    // 2) Clear session + login
-    await page.context().clearCookies();
-    await page.goto(baseURL);
-    await page.evaluate(() => {
-      localStorage.clear();
-      sessionStorage.clear();
-    });
-    await page.reload();
-
-    const loginForm = page.locator('form:has(button:has-text("Bejelentkezés"))');
-    await loginForm.getByPlaceholder('Felhasználónév').fill(username);
-    await loginForm.getByPlaceholder('Jelszó').fill(password);
-    await loginForm.getByRole('button', { name: 'Bejelentkezés' }).click();
-
-    await expect(page.getByRole('heading', { name: /todo lista/i })).toBeVisible({ timeout: 15000 });
+    await expectTodoListVisible(page);
   });
 });
